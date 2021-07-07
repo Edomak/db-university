@@ -61,6 +61,26 @@ INNER JOIN `departments`
 ON `degrees`.`department_id` = `departments`.`id`
 WHERE `departments`.`name` = 'Dipartimento di Matematica';
 
+Bonus: Selezionare per ogni studente quanti tentativi di esame ha sostenuto per superare ciascuno dei suoi esami:
+
+SELECT 
+	`students`.`registration_number`,
+    `students`.`name`,
+    `students`.`surname`,
+    `courses`.`name` AS `corso`,
+    `courses`.`id` AS `id_corso`,
+    COUNT(`exam_student`.`vote`) AS `numero_tentativi`,
+    MAX(`exam_student`.`vote`) AS `voto_massimo`
+FROM `students`
+INNER JOIN `exam_student`
+ON `students`.`id` = `exam_student`.`student_id`
+INNER JOIN `exams`
+ON `exam_student`.`exam_id` = `exams`.`id`
+INNER JOIN `courses`
+ON `exams`.`course_id` = `courses`.`id`
+GROUP BY `students`.`id`, `courses`.`id`
+HAVING `voto_massimo` >= 18
+
 
 
 
